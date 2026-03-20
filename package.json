@@ -23,9 +23,9 @@
   "author": "Carlo Zottmann <carlo@zottmann.dev>",
   "license": "MIT",
   "dependencies": {
-    "cheerio": "^1.1.2"
+    "cheerio": "^1.1.2",
+    "wreq-js": "^2.2.2"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/czottmann/kagi-ken.git"

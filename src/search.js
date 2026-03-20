@@ -3,7 +3,7 @@
  */
 
 import * as cheerio from "cheerio";
-import { USER_AGENT } from "./utils/http.js";
+import { fetch, BROWSER } from "./utils/http.js";
 
 /**
  * Performs a search on Kagi.com and returns structured results
@@ -33,8 +33,8 @@ export async function search(query, token, limit = 10) {
     const response = await fetch(
       `https://kagi.com/html/search?q=${encodeURIComponent(query)}`,
       {
+        browser: BROWSER,
         headers: {
-          "User-Agent": USER_AGENT,
           "Cookie": `kagi_session=${token}`,
         },
       },
@@ -51,7 +51,7 @@ export async function search(query, token, limit = 10) {
     const results = parseSearchResults(html, limit);
     return { data: results };
   } catch (error) {
-    if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
+    if (error.constructor.name === "RequestError") {
       throw new Error("Network error: Unable to connect to Kagi");
     }
     throw error;

@@ -2,7 +2,7 @@
  * @fileoverview Kagi summarizer functionality
  */
 
-import { USER_AGENT } from "./utils/http.js";
+import { fetch, BROWSER } from "./utils/http.js";
 
 // Supported language codes from Kagi Universal Summarizer API
 export const SUPPORTED_LANGUAGES = [
@@ -84,14 +84,13 @@ export async function summarize(input, token, options) {
 
       response = await fetch(url.toString(), {
         method: "GET",
+        browser: BROWSER,
         headers: {
           "Accept": "application/vnd.kagi.stream",
           "Connection": "keep-alive",
           "Cookie": `kagi_session=${token}`,
-          "Host": "kagi.com",
           "Pragma": "no-cache",
           "Referer": "https://kagi.com/summarizer",
-          "User-Agent": USER_AGENT,
         },
       });
     } else {
@@ -104,15 +103,14 @@ export async function summarize(input, token, options) {
 
       response = await fetch("https://kagi.com/mother/summary_labs/", {
         method: "POST",
+        browser: BROWSER,
         headers: {
           "Accept": "application/vnd.kagi.stream",
           "Connection": "keep-alive",
           "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
           "Cookie": `kagi_session=${token}`,
-          "Host": "kagi.com",
           "Pragma": "no-cache",
           "Referer": "https://kagi.com/summarizer",
-          "User-Agent": USER_AGENT,
         },
         body: formData,
       });
@@ -133,7 +131,7 @@ export async function summarize(input, token, options) {
     const output = parsedResponse?.output_data?.markdown ?? parsedResponse?.md ?? "";
     return { data: { output } };
   } catch (error) {
-    if (error.code === "ENOTFOUND" || error.code === "ECONNREFUSED") {
+    if (error.constructor.name === "RequestError") {
       throw new Error("Network error: Unable to connect to Kagi");
     }
     throw error;
