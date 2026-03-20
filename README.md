@@ -1,5 +1,7 @@
 # kagi-ken
 
+> **Fork note:** This fork replaces native `fetch` with [wreq-js](https://www.npmjs.com/package/wreq-js) to impersonate Firefox 147's TLS fingerprint, making requests indistinguishable from a real browser at the TLS level.
+
 A lightweight Node package that provides programmatic access to Kagi.com services using session tokens:
 
 - **Search**: Searches Kagi.com and returns structured JSON data matching Kagi's official search API schema
